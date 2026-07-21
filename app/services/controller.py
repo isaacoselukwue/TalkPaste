@@ -101,6 +101,16 @@ class DictationController:
     def state(self) -> AppState:
         return self._state
 
+    def current_level(self) -> float:
+        """Current mic RMS level (0..1) while recording, else 0.0."""
+
+        if self._audio is not None and self._recording:
+            try:
+                return float(self._audio.level)
+            except Exception:
+                return 0.0
+        return 0.0
+
     @property
     def adapter(self) -> PlatformAdapter:
         if self._adapter is None:

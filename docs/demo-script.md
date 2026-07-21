@@ -1,36 +1,19 @@
 # Demo & screenshots
 
-This repo cannot capture real screenshots in CI, so the images referenced by the
-README are **placeholders** for a maintainer to fill. Filenames are fixed so the
-README links resolve once you drop the images in `assets/`.
+## Screenshots (generated)
 
-## Screenshots to capture (save under `assets/`)
+The UI screenshots in `assets/` are produced from the real widgets — no display
+server needed — by:
 
-| File | What to show |
-| --- | --- |
-| `assets/screenshot-tray.png` | The tray icon + right-click menu (states visible) |
-| `assets/screenshot-settings.png` | The Settings window, Model tab |
-| `assets/screenshot-shortcuts.png` | The Shortcuts tab with `QKeySequenceEdit` |
-| `assets/screenshot-popup.png` | The status popup mid-“Listening…” |
-| `assets/screenshot-diagnostics.png` | `diagnose-platform` output in a terminal |
+```bash
+python scripts/capture_screenshots.py
+```
 
-Recommended: PNG, ~1200px wide, light theme, cropped tight.
-
-## Producing them
-
-1. Install and launch the tray app:
-   ```bash
-   pip install -r requirements.txt
-   python -m app.main
-   ```
-2. Trigger a dictation (hold Ctrl+Alt+Space) to reach the *Listening* and
-   *Processing* states, and grab the popup.
-3. Open **Settings…** from the tray menu; screenshot the Model and Shortcuts
-   tabs.
-4. In a terminal, capture the diagnostics text:
-   ```bash
-   python -m app.cli diagnose-platform -v
-   ```
+It renders under Qt's `offscreen` platform with sample data and writes
+`screenshot-main.png`, `screenshot-listening.png`, `screenshot-settings.png`,
+`screenshot-shortcuts.png`, `screenshot-diagnostics.png` and
+`screenshot-popup.png`. Re-run it after any UI change. To capture on a real
+desktop instead, launch `python -m app.main` and use your OS screenshot tool.
 
 ## Short screen capture (optional)
 

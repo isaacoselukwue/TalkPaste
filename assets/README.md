@@ -1,14 +1,20 @@
 # Assets
 
-Placeholder directory for screenshots and demo media referenced by the docs.
-Drop the following in here (see [../docs/demo-script.md](../docs/demo-script.md)):
+Screenshots here are **generated** (no display server required) by:
 
-- `screenshot-tray.png`
-- `screenshot-settings.png`
-- `screenshot-shortcuts.png`
-- `screenshot-popup.png`
-- `screenshot-diagnostics.png`
-- `demo.gif` (optional short capture)
+```bash
+python scripts/capture_screenshots.py
+```
 
-Until these exist, the README image links will show broken-image placeholders —
-that is expected for a fresh checkout.
+It renders the real widgets under Qt's `offscreen` platform with sample data:
+
+- `screenshot-main.png` — main window, idle
+- `screenshot-listening.png` — main window, recording (level meter active)
+- `screenshot-settings.png` — settings, Model tab
+- `screenshot-shortcuts.png` — settings, Shortcuts tab (`QKeySequenceEdit`)
+- `screenshot-diagnostics.png` — settings, platform diagnostics
+- `screenshot-popup.png` — the status popup
+
+Re-run the script after any UI change to refresh them. A short screen capture
+(`demo.gif`) is still nice to add by hand — see
+[../docs/demo-script.md](../docs/demo-script.md).

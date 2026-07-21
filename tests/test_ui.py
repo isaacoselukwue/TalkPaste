@@ -92,6 +92,40 @@ def test_tray_app_builds(qapp, data_dir):
     tray = TrayApp(Settings(), get_paths().ensure(), qapp)
     assert tray.tray.contextMenu() is not None
     assert len(tray.tray.contextMenu().actions()) >= 6
+    assert tray.window is not None
     # Simulate a controller state change reaching the GUI slot directly.
     tray._on_state(AppState.PROCESSING, "Transcribing…")
     assert "Transcribing" in tray.tray.toolTip()
+
+
+def test_main_window(qapp, data_dir):
+    from app.config import get_paths
+    from app.services.controller import DictationController
+    from app.services.history_store import HistoryEntry
+    from app.ui.main_window import MainWindow
+
+    ctrl = DictationController(Settings(), paths=get_paths().ensure())
+    ctrl.history.add(HistoryEntry(text="a recent note", backend="fake", model="m"))
+
+    win = MainWindow(ctrl)
+    win.refresh_recent()
+    assert win.recent_list.count() == 1
+
+    # Idle -> listening flips the record button and starts the level timer.
+    win.update_state(AppState.LISTENING, "Listening")
+    assert "Stop" in win.record_btn.text()
+    assert win._level_timer.isActive()
+
+    win.update_state(AppState.IDLE, "Ready")
+    assert "Start" in win.record_btn.text()
+    assert not win._level_timer.isActive()
+
+    from app.services.controller import DictationResult
+
+    win.add_result(DictationResult(raw_text="hi", final_text="Hello there."))
+    assert "Hello there." in win.last_text.toPlainText()
+
+    # Closing hides to tray rather than quitting.
+    win.show()
+    win.close()
+    assert not win.isVisible()

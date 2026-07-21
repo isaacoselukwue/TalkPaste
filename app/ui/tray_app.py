@@ -13,6 +13,7 @@ from app.config import Paths, get_paths, load_settings
 from app.logging_setup import get_logger
 from app.models import AppState, Settings
 from app.services.controller import DictationController, DictationResult
+from app.ui.main_window import MainWindow
 from app.ui.settings_window import SettingsWindow
 from app.ui.status_popup import StatusPopup
 
@@ -67,6 +68,13 @@ class TrayApp(QObject):
         self._status_action: QAction | None = None
         self._settings_window: SettingsWindow | None = None
 
+        self.window = MainWindow(
+            self.controller,
+            on_open_settings=self._open_settings,
+            on_open_diagnostics=self._show_diagnostics,
+            on_quit=self.quit,
+        )
+
         self._build_menu()
         self.tray.activated.connect(self._on_activated)
 
@@ -75,15 +83,24 @@ class TrayApp(QObject):
         self._result_ready.connect(self._on_result, Qt.ConnectionType.QueuedConnection)
 
 
-    def start(self) -> None:
+    def start(self, show_window: bool = True) -> None:
         self.tray.show()
         self.controller.start()
+        if show_window:
+            self.show_window()
         QTimer.singleShot(0, self.controller.preload_model)
+
+    def show_window(self) -> None:
+        self.window.refresh_recent()
+        self.window.show()
+        self.window.raise_()
+        self.window.activateWindow()
 
     def quit(self) -> None:
         log.info("Quit requested")
         self.controller.close()
         self.popup.close()
+        self.window.close()
         self.tray.hide()
         self.app.quit()
 
@@ -93,6 +110,10 @@ class TrayApp(QObject):
 
         self._status_action = menu.addAction("Idle")
         self._status_action.setEnabled(False)
+        menu.addSeparator()
+
+        open_action = menu.addAction("Open TalkPaste")
+        open_action.triggered.connect(self.show_window)
         menu.addSeparator()
 
         toggle = menu.addAction("Start / stop dictation")
@@ -145,17 +166,19 @@ class TrayApp(QObject):
         if self._status_action is not None:
             self._status_action.setText(message or state.value.title())
         self.popup.show_for_state(state, message)
+        self.window.update_state(state, message)
         if state is AppState.ERROR:
             self._notify(f"{APP_NAME} error", message, icon=QSystemTrayIcon.MessageIcon.Warning)
 
     def _on_result(self, result: DictationResult) -> None:
+        self.window.add_result(result)
         if result.ok and result.paste and result.paste.needs_manual_paste:
             self._notify("Copied — paste manually", result.final_text[:80])
 
 
     def _on_activated(self, reason: QSystemTrayIcon.ActivationReason) -> None:
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
-            self.controller.toggle_dictation()
+            self.show_window()
 
     def _open_settings(self) -> None:
         if self._settings_window is None:
