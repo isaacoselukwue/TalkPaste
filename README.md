@@ -20,6 +20,27 @@ machine.
 
 ---
 
+## Download
+
+Prebuilt binaries are published on the
+[**Releases**](https://github.com/isaacoselukwue/TalkPaste/releases) page — no
+build step required:
+
+| OS | Asset | Run |
+| --- | --- | --- |
+| **Windows 10/11** | `talkpaste-windows-x64.zip` | Unzip and run `talkpaste.exe` |
+| **Linux (x86-64)** | `talkpaste-linux-x86_64.tar.gz` | `tar -xzf …` then `./talkpaste/talkpaste` |
+
+Models download automatically on first use. On Linux, install the runtime
+helpers first: `sudo apt install xdotool xclip libportaudio2` (X11) or
+`wl-clipboard` (Wayland).
+
+> Every release is built automatically by GitHub Actions
+> ([`release.yml`](.github/workflows/release.yml)) when a `vX.Y.Z` tag is
+> pushed, so each version ships ready-to-run downloads for every platform. No
+> local toolchain needed. Prefer to run from source instead? See
+> [Install](#install).
+
 ## Features
 
 - 🎙️ **Speak into any app** — push-to-talk or hands-free toggle, then paste into
@@ -54,7 +75,7 @@ Full detail: [docs/platform-support.md](docs/platform-support.md).
 Requires **Python 3.11+**.
 
 ```bash
-git clone https://github.com/princeizak/TalkPaste.git
+git clone https://github.com/isaacoselukwue/TalkPaste.git
 cd TalkPaste
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt

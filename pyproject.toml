@@ -53,9 +53,9 @@ talkpaste = "app.cli:main"
 talkpaste-tray = "app.main:main"
 
 [project.urls]
-Homepage = "https://github.com/princeizak/TalkPaste"
-Repository = "https://github.com/princeizak/TalkPaste"
-Issues = "https://github.com/princeizak/TalkPaste/issues"
+Homepage = "https://github.com/isaacoselukwue/TalkPaste"
+Repository = "https://github.com/isaacoselukwue/TalkPaste"
+Issues = "https://github.com/isaacoselukwue/TalkPaste/issues"
 
 [tool.setuptools]
 packages = ["app", "app.services", "app.platform", "app.ui"]

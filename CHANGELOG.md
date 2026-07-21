@@ -32,4 +32,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   per-user data directory.
 - PyInstaller packaging specs and GitHub Actions CI/release workflows.
 
-[Unreleased]: https://github.com/princeizak/TalkPaste
+[Unreleased]: https://github.com/isaacoselukwue/TalkPaste
