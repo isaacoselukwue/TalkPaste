@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "talkpaste"
+version = "0.1.0"
+description = "Fully-local, cross-platform push-to-talk dictation for Windows and Linux."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "TalkPaste contributors" }]
+keywords = ["dictation", "speech-to-text", "whisper", "accessibility", "local", "offline"]
+classifiers = [
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+
+dependencies = [
+    "PySide6>=6.6,<7",
+    "sounddevice>=0.4.6",
+    "numpy>=1.24",
+    "faster-whisper>=1.0.0",
+    "typer>=0.9",
+    "platformdirs>=3.0",
+    "pynput>=1.7.6 ; sys_platform == 'linux'",
+    "dbus-next>=0.2.3 ; sys_platform == 'linux'",
+    "pywin32>=306 ; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+rewrite = ["llama-cpp-python>=0.2.70"]
+whispercpp = ["pywhispercpp>=1.2.0"]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-qt>=4.3",
+    "ruff>=0.4",
+    "mypy>=1.8",
+    "pyinstaller>=6.3",
+]
+
+[project.scripts]
+talkpaste = "app.cli:main"
+
+[project.gui-scripts]
+talkpaste-tray = "app.main:main"
+
+[project.urls]
+Homepage = "https://github.com/princeizak/TalkPaste"
+Repository = "https://github.com/princeizak/TalkPaste"
+Issues = "https://github.com/princeizak/TalkPaste/issues"
+
+[tool.setuptools]
+packages = ["app", "app.services", "app.platform", "app.ui"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "integration: end-to-end tests that touch real files or subprocesses",
+    "requires_qt: needs PySide6 installed",
+    "requires_model: needs an ASR model available (network/download)",
+]
+
+[tool.ruff]
+line-length = 100
+# Lint against 3.10 so ruff never rewrites to 3.11-only idioms (e.g. datetime.UTC);
+# the code stays runnable on 3.10 even though the project targets 3.11+.
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4"]
+ignore = [
+    "E501",   # line length handled by the formatter
+    "UP042",  # StrEnum is 3.11+; we keep (str, Enum) for 3.10 compatibility
+    "B008",   # Typer uses function calls (Option/Argument) as defaults by design
+    "B027",   # ASRBackend.unload is an intentional optional-override no-op
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]  # tests set QT_QPA_PLATFORM before importing PySide6
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_ignores = true
+ignore_missing_imports = true
+check_untyped_defs = true

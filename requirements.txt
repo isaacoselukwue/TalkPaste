@@ -1,0 +1,30 @@
+# TalkPaste runtime dependencies (core app shell).
+#
+# Models are NEVER bundled — they live in the user data directory and are
+# downloaded/located at runtime. Optional heavy extras (whisper.cpp bindings,
+# llama-cpp-python for rewrite) are listed separately below and only needed
+# when the corresponding feature is enabled.
+
+# --- Core (required) -------------------------------------------------------
+PySide6>=6.6,<7            # tray app, settings UI, QClipboard, QKeySequenceEdit
+sounddevice>=0.4.6         # callback-driven microphone capture
+numpy>=1.24                # audio buffers + light DSP
+faster-whisper>=1.0.0      # default ASR backend (CTranslate2, CPU int8)
+typer>=0.9                 # CLI
+platformdirs>=3.0          # per-user data/config/cache dirs
+
+# --- Linux-only ------------------------------------------------------------
+pynput>=1.7.6 ; sys_platform == "linux"      # X11 keyboard capture
+dbus-next>=0.2.3 ; sys_platform == "linux"   # Wayland XDG portal access
+
+# --- Windows-only ----------------------------------------------------------
+# Win32 hooks + SendInput are driven through ctypes (stdlib); pywin32 is only
+# needed for a few niceties and is optional.
+pywin32>=306 ; sys_platform == "win32"
+
+# --- Optional feature extras (install on demand) ---------------------------
+# Local LLM rewrite mode (disabled by default):
+#   pip install "llama-cpp-python>=0.2.70"
+# whisper.cpp low-RAM backend (choose ONE of):
+#   pip install pywhispercpp        # python bindings, or
+#   use an external `whisper-cli` / `main` binary via subprocess (no pip dep)
