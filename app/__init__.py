@@ -21,7 +21,7 @@ from __future__ import annotations
 
 __all__ = ["__version__", "APP_NAME", "APP_SLUG", "APP_AUTHOR"]
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 #: Human-facing product name.
 APP_NAME = "TalkPaste"

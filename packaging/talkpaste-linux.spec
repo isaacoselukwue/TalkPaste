@@ -7,19 +7,27 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
 
+from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs
+
 block_cipher = None
 project_root = os.path.abspath(os.getcwd())
+
+datas = collect_data_files("faster_whisper")
+
+binaries = collect_dynamic_libs("onnxruntime")
+binaries += collect_dynamic_libs("ctranslate2")
 
 a = Analysis(
     [os.path.join(project_root, "app", "main.py")],
     pathex=[project_root],
-    binaries=[],
-    datas=[],
+    binaries=binaries,
+    datas=datas,
     hiddenimports=[
         "app.platform.linux_x11_adapter",
         "app.platform.linux_wayland_adapter",
         "app.services.asr_faster_whisper",
         "app.services.asr_whisper_cpp",
+        "onnxruntime",
     ],
     hookspath=[],
     hooksconfig={},

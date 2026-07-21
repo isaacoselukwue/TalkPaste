@@ -7,18 +7,27 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
 
+from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs
+
 block_cipher = None
 project_root = os.path.abspath(os.getcwd())
+
+datas = collect_data_files("faster_whisper")
+datas += collect_data_files("_sounddevice_data")
+
+binaries = collect_dynamic_libs("onnxruntime")
+binaries += collect_dynamic_libs("ctranslate2")
 
 a = Analysis(
     [os.path.join(project_root, "app", "main.py")],
     pathex=[project_root],
-    binaries=[],
-    datas=[],
+    binaries=binaries,
+    datas=datas,
     hiddenimports=[
         "app.platform.windows_adapter",
         "app.services.asr_faster_whisper",
         "app.services.asr_whisper_cpp",
+        "onnxruntime",
     ],
     hookspath=[],
     hooksconfig={},
@@ -41,7 +50,7 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     console=False,  # no console window for the GUI app
     disable_windowed_traceback=False,
     argv_emulation=False,
@@ -56,7 +65,7 @@ coll = COLLECT(
     a.binaries,
     a.datas,
     strip=False,
-    upx=True,
+    upx=False,
     upx_exclude=[],
     name="talkpaste",
 )

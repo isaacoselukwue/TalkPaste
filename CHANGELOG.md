@@ -6,6 +6,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-21
+
+### Fixed
+- Windows packaging: bundle the runtime library assets PyInstaller's import
+  scan does not collect (faster-whisper's Silero VAD `silero_vad_v6.onnx`,
+  sounddevice's PortAudio DLL, and the onnxruntime and CTranslate2 native
+  libraries). Fixes the missing-ONNX crash and no-audio or VAD failures in the
+  packaged app. UPX is disabled on Windows to avoid corrupting Qt and
+  onnxruntime DLLs.
+- Windows CLI: route console output through plain UTF-8 writes so `typer`
+  status messages no longer raise `OSError: [WinError 6]` on consoles where
+  `WriteConsoleW` fails (the VS Code terminal, mintty, redirected handles).
+
+## [0.1.0] - 2026-07-21
+
 ### Added
 - Initial release of TalkPaste, a fully-local, cross-platform push-to-talk
   dictation app for Windows 10/11 and Ubuntu 22.04+.
@@ -33,3 +48,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - PyInstaller packaging specs and GitHub Actions CI/release workflows.
 
 [Unreleased]: https://github.com/isaacoselukwue/TalkPaste
+[0.1.1]: https://github.com/isaacoselukwue/TalkPaste/releases/tag/v0.1.1
+[0.1.0]: https://github.com/isaacoselukwue/TalkPaste/releases/tag/v0.1.0

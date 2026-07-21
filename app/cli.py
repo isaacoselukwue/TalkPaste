@@ -16,6 +16,7 @@ Commands
 
 from __future__ import annotations
 
+import io
 import json as _json
 import signal
 import sys
@@ -414,9 +415,59 @@ def version() -> None:
     typer.echo(f"{APP_NAME} {__version__}")
 
 
+class _PlainConsoleWriter(io.TextIOBase):
+    """A text stream that forwards writes but reports no console file handle."""
+
+    def __init__(self, wrapped: io.TextIOBase) -> None:
+        self._wrapped = wrapped
+
+    def write(self, text: str) -> int:
+        self._wrapped.write(text)
+        self._wrapped.flush()
+        return len(text)
+
+    def flush(self) -> None:
+        try:
+            self._wrapped.flush()
+        except OSError:
+            pass
+
+    def isatty(self) -> bool:
+        return False
+
+
+def _harden_windows_console() -> None:
+    """Route console output through plain UTF-8 writes on Windows.
+
+    Some Windows consoles (the VS Code terminal, mintty, redirected handles)
+    accept Python's own writes but fail Click/Colorama's ``WriteConsoleW`` with
+    ``OSError: [WinError 6]``. Presenting streams with no console file handle
+    makes Click fall back to the plain writes that work everywhere.
+    """
+
+    if sys.platform != "win32":
+        return
+    try:
+        import ctypes
+
+        ctypes.windll.kernel32.SetConsoleOutputCP(65001)
+    except Exception:
+        pass
+    for name in ("stdout", "stderr"):
+        stream = getattr(sys, name, None)
+        buffer = getattr(stream, "buffer", None)
+        if buffer is None:
+            continue
+        wrapped = io.TextIOWrapper(
+            buffer, encoding="utf-8", errors="replace", line_buffering=True
+        )
+        setattr(sys, name, _PlainConsoleWriter(wrapped))
+
+
 def main(argv: list[str] | None = None) -> None:
     """Console-script entry point."""
 
+    _harden_windows_console()
     app(args=argv)
 
 
