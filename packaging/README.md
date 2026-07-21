@@ -37,5 +37,7 @@ Compress-Archive -Path dist\talkpaste\* -DestinationPath talkpaste-windows-x64.z
 
 ## Store / distribution notes
 
-See [../docs/release-checklist.md](../docs/release-checklist.md) for the full
-release flow, GitHub Releases, and Microsoft Store / Snap Store guidance.
+Build per OS as above and publish via **GitHub Releases** — the tag-driven
+workflow in [../.github/workflows/release.yml](../.github/workflows/release.yml)
+does this automatically. Microsoft Store (MSIX) and Snap/Flathub are possible
+but require developer accounts and manual packaging.

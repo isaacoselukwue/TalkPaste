@@ -16,5 +16,4 @@ It renders the real widgets under Qt's `offscreen` platform with sample data:
 - `screenshot-popup.png` — the status popup
 
 Re-run the script after any UI change to refresh them. A short screen capture
-(`demo.gif`) is still nice to add by hand — see
-[../docs/demo-script.md](../docs/demo-script.md).
+(`demo.gif`) recorded on a real desktop is a nice addition too.
