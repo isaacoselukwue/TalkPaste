@@ -1,6 +1,6 @@
 # Packaging TalkPaste
 
-TalkPaste ships as a small application **shell**. Models are never bundled — they
+TalkPaste ships as a small application **shell**. Models are never bundled; they
 are downloaded/located at runtime under the per-user data directory
 (`talkpaste config-path` shows exactly where). This keeps the executable small
 and lets users pick model sizes to suit their hardware.
@@ -37,7 +37,7 @@ Compress-Archive -Path dist\talkpaste\* -DestinationPath talkpaste-windows-x64.z
 
 ## Store / distribution notes
 
-Build per OS as above and publish via **GitHub Releases** — the tag-driven
+Build per OS as above and publish via **GitHub Releases**. The tag-driven
 workflow in [../.github/workflows/release.yml](../.github/workflows/release.yml)
 does this automatically. Microsoft Store (MSIX) and Snap/Flathub are possible
 but require developer accounts and manual packaging.

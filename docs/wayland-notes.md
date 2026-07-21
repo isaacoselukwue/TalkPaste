@@ -2,8 +2,8 @@
 
 Wayland intentionally prevents apps from grabbing global keyboard input or
 synthesising keystrokes into other windows. TalkPaste therefore treats Wayland
-as **best-effort** and always degrades gracefully with a clear explanation —
-never a silent failure, never a demand for root.
+as **best-effort** and always degrades gracefully with a clear explanation.
+There is never a silent failure, and never a demand for root.
 
 ## Global hotkeys
 
@@ -28,12 +28,12 @@ directory, so no special privileges are needed.
 
 In `PASTE` mode TalkPaste tries, in order:
 
-1. **XDG Portal `RemoteDesktop`** keyboard control — creates a session (you may
-   be prompted once) and injects Ctrl+V. The session is cached for the run.
-2. **`ydotool`** — only if you explicitly enable it (Settings → Paste → “Allow
-   ydotool”, or `paste.allow_ydotool`). It is never a silent default and
+1. **XDG Portal `RemoteDesktop`** keyboard control: this creates a session (you
+   may be prompted once) and injects Ctrl+V. The session is cached for the run.
+2. **`ydotool`**, used only if you explicitly enable it (Settings → Paste →
+   “Allow ydotool”, or `paste.allow_ydotool`). It is never a silent default and
    typically needs `ydotoold` running.
-3. **Copy-only** — the text is placed on the clipboard and you press Ctrl+V. The
+3. **Copy-only**: the text is placed on the clipboard and you press Ctrl+V. The
    status popup/notification tells you when this happens.
 
 ## Clipboard

@@ -2,10 +2,13 @@
 
 **Fully-local, cross-platform push-to-talk dictation for Windows and Linux.**
 
-Hold a global shortcut, speak, release — TalkPaste transcribes your speech
+Hold a global shortcut, speak, release, and TalkPaste transcribes your speech
 locally with a Whisper-family model, cleans up the text, and pastes it into
 whatever app you are focused on. No cloud, no account, no audio ever leaves your
 machine.
+
+📖 Read the launch article on dev.to:
+[TalkPaste: private, offline push-to-talk dictation](https://dev.to/isaacose/talkpaste-private-offline-push-to-talk-dictation-for-linux-and-windows-4987)
 
 ![TalkPaste main window](assets/screenshot-main.png)
 
@@ -23,13 +26,13 @@ machine.
 ## Download
 
 Prebuilt binaries are published on the
-[**Releases**](https://github.com/isaacoselukwue/TalkPaste/releases) page — no
-build step required:
+[**Releases**](https://github.com/isaacoselukwue/TalkPaste/releases) page, with
+no build step required:
 
 | OS | Asset | Run |
 | --- | --- | --- |
 | **Windows 10/11** | `talkpaste-windows-x64.zip` | Unzip and run `talkpaste.exe` |
-| **Linux (x86-64)** | `talkpaste-linux-x86_64.tar.gz` | `tar -xzf …` then `./talkpaste/talkpaste` |
+| **Linux (x86-64)** | `talkpaste-linux-x86_64.tar.gz` | Extract, then run `./talkpaste/talkpaste` |
 
 Models download automatically on first use. On Linux, install the runtime
 helpers first: `sudo apt install xdotool xclip libportaudio2` (X11) or
@@ -37,27 +40,27 @@ helpers first: `sudo apt install xdotool xclip libportaudio2` (X11) or
 
 > Every release is built automatically by GitHub Actions
 > ([`release.yml`](.github/workflows/release.yml)) when a `vX.Y.Z` tag is
-> pushed, so each version ships ready-to-run downloads for every platform. No
-> local toolchain needed. Prefer to run from source instead? See
+> pushed, so each version ships ready-to-run downloads for every platform, with
+> no local toolchain needed. Prefer to run from source instead? See
 > [Install](#install).
 
 ## Features
 
-- 🎙️ **Speak into any app** — push-to-talk or hands-free toggle, then paste into
+- 🎙️ **Speak into any app.** Push-to-talk or hands-free toggle, then paste into
   the focused window.
-- 🔒 **Local & offline** — transcription runs on-device with
+- 🔒 **Local and offline.** Transcription runs on-device with
   [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (CPU int8 by
   default). Nothing is uploaded.
-- 🧹 **Deterministic cleanup** — filler removal, spoken punctuation and
+- 🧹 **Deterministic cleanup.** Filler removal, spoken punctuation and
   formatting commands, snippets, a custom dictionary, developer casing helpers,
   and British-English spelling.
-- 🗣️ **Spoken commands** — “new line”, “comma”, “open quote … close quote”,
-  “bullet list”, “scratch that”, “snake case …”, and more.
-- 🧠 **Optional local rewrite** — grammar/punctuation cleanup via a small local
-  GGUF model (off by default, hard-timeout protected).
-- 🪶 **Runs on weak PCs** — `tiny.en`/`base.en` profiles, lazy model loading,
-  work off the UI thread.
-- 🧩 **Clean architecture** — isolated platform adapters and a pluggable ASR
+- 🗣️ **Spoken commands.** "new line", "comma", "open quote", "close quote",
+  "bullet list", "scratch that", "snake case", and more.
+- 🧠 **Optional local rewrite.** Grammar and punctuation cleanup via a small
+  local GGUF model (off by default, hard-timeout protected).
+- 🪶 **Runs on weak PCs.** `tiny.en` and `base.en` profiles, lazy model loading,
+  and heavy work kept off the UI thread.
+- 🧩 **Clean architecture.** Isolated platform adapters and a pluggable ASR
   backend, so pieces can be swapped or rewritten later.
 
 ## Supported platforms
@@ -65,7 +68,7 @@ helpers first: `sudo apt install xdotool xclip libportaudio2` (X11) or
 | Platform | Hotkeys | Paste injection | Notes |
 | --- | --- | --- | --- |
 | **Windows 10/11** | Win32 low-level keyboard hook | `SendInput` Ctrl+V | First-class. Injecting into elevated apps needs TalkPaste run as admin. |
-| **Linux / X11** | `pynput` global listener | `xdotool` Ctrl+V | Install `xdotool` + `xclip`/`xsel`. |
+| **Linux / X11** | `pynput` global listener | `xdotool` Ctrl+V | Install `xdotool` plus `xclip` or `xsel`. |
 | **Linux / Wayland** | XDG portal *GlobalShortcuts* | XDG portal *RemoteDesktop*, or opt-in `ydotool` | Best-effort; falls back to copy-only with a clear prompt. See [docs/wayland-notes.md](docs/wayland-notes.md). |
 
 Full detail: [docs/platform-support.md](docs/platform-support.md).
@@ -86,7 +89,7 @@ pip install -r requirements.txt
 - **Linux/X11:** `sudo apt install xdotool xclip` (or `xsel`)
 - **Linux/Wayland:** `sudo apt install wl-clipboard`; optionally `ydotool`
 - **Microphone (all Linux):** `sudo apt install libportaudio2`
-- **Windows:** nothing extra — Win32 APIs are used via `ctypes`.
+- **Windows:** nothing extra, since Win32 APIs are used via `ctypes`.
 
 ### Models
 
@@ -150,18 +153,18 @@ python -m app.main        # or: python main.py
 Launches the **main window** plus a persistent tray icon:
 
 - A big **Start / Stop** button (or hold your global shortcut) starts a
-  dictation; a live level meter shows your mic input.
-- The current state is shown as a coloured pill — **Idle / Listening /
-  Processing / Ready / Error** — mirrored by the tray icon and a small popup.
+  dictation, and a live level meter shows your mic input.
+- The current state is shown as a coloured pill (**Idle / Listening /
+  Processing / Ready / Error**), mirrored by the tray icon and a small popup.
 - **Last transcript** and a **Recent** list (double-click any entry to copy).
-- **Settings…** — model & profile, language, rewrite, shortcut editor
-  (`QKeySequenceEdit`), paste behaviour, audio device, dictionary/snippet
+- **Settings.** Model and profile, language, rewrite, the shortcut editor
+  (`QKeySequenceEdit`), paste behaviour, audio device, dictionary and snippet
   editors, and a platform-capability diagnostics panel.
 
-**Tray**: left-click (or "Open TalkPaste") reopens the window; the menu also has
-Start/stop, Cancel, Recent transcripts, Settings…, Diagnostics… and Quit.
-Closing the window hides it to the tray — the app keeps running in the
-background. Quit from the tray menu to exit fully.
+**Tray**: left-click (or "Open TalkPaste") reopens the window. The menu also has
+Start/stop, Cancel, Recent transcripts, Settings, Diagnostics and Quit. Closing
+the window hides it to the tray, so the app keeps running in the background.
+Quit from the tray menu to exit fully.
 
 Default shortcuts (editable, and deliberately not F12):
 
@@ -174,10 +177,10 @@ Default shortcuts (editable, and deliberately not F12):
 `new line`, `new paragraph`, `press enter`, `tab`, `comma`, `full stop` /
 `period`, `question mark`, `exclamation mark`, `colon`, `semicolon`,
 `open`/`close quote`, `open`/`close bracket`, `bullet list`, `numbered list`,
-`scratch that`, `undo last phrase`, `snake case …`, `camel case …`. With
-developer mode: `kebab case`, `constant case`, `pascal case`, `cli flag …`.
+`scratch that`, `undo last phrase`, `snake case`, `camel case`. With developer
+mode: `kebab case`, `constant case`, `pascal case`, `cli flag`.
 
-Custom `dictionary.json` (spoken → written) and `snippets.json` (trigger →
+Custom `dictionary.json` (spoken to written) and `snippets.json` (trigger to
 expansion) live in your data directory and are editable from the settings UI.
 
 ## Data & configuration
@@ -209,7 +212,7 @@ python scripts/make_fixture.py   # regenerate the WAV test fixture
 
 ## Packaging
 
-Per-OS builds with PyInstaller (no cross-compilation) — see
+Per-OS builds with PyInstaller (no cross-compilation). See
 [packaging/README.md](packaging/README.md):
 
 ```bash
@@ -219,17 +222,17 @@ powershell -File scripts\build_windows.ps1      # Windows -> dist\talkpaste\
 
 ## Troubleshooting
 
-- **“No transcript / empty output.”** Silence or non-speech is filtered by VAD.
+- **No transcript / empty output.** Silence or non-speech is filtered by VAD.
   Check `list-audio-devices` and pick the right input in Settings.
-- **“Nothing gets pasted.”** Run `diagnose-platform`. On X11 install `xdotool`;
+- **Nothing gets pasted.** Run `diagnose-platform`. On X11 install `xdotool`;
   on Wayland see [docs/wayland-notes.md](docs/wayland-notes.md); on Windows,
   elevated target apps require running TalkPaste as administrator. Copy-only
-  mode always works — paste with Ctrl+V.
-- **“Global hotkeys don’t fire (Wayland).”** Bind a system shortcut to
-  `talkpaste dictate-toggle` (needs a running `run-headless`/tray instance).
-- **“PortAudio library not found.”** `sudo apt install libportaudio2`.
-- **Slow first transcription.** The model downloads/loads lazily on first use;
-  it is cached afterwards. Try the `fast` profile on weak machines.
+  mode always works, so you can paste with Ctrl+V.
+- **Global hotkeys do not fire (Wayland).** Bind a system shortcut to
+  `talkpaste dictate-toggle` (needs a running `run-headless` or tray instance).
+- **PortAudio library not found.** `sudo apt install libportaudio2`.
+- **Slow first transcription.** The model downloads and loads lazily on first
+  use, then is cached. Try the `fast` profile on weak machines.
 - **Logs** live in `<data-dir>/logs/talkpaste.log` (`config-path` to locate).
 
 ## Project layout

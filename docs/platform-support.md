@@ -14,7 +14,7 @@ available in your current session.
 
 ## Windows
 
-- Native `ctypes` Win32 — no `pynput`. A low-level keyboard hook runs on a
+- Native `ctypes` Win32, with no `pynput`. A low-level keyboard hook runs on a
   dedicated message-loop thread so both key press and release are observed
   (needed for push-to-talk).
 - Paste is synthesised with `SendInput`. Injecting into an **elevated** target
@@ -30,12 +30,12 @@ available in your current session.
 - Paste via `xdotool`. If `xdotool` is missing, TalkPaste falls back to
   copy-only and logs the exact reason. Install: `sudo apt install xdotool`.
 - Clipboard needs `xclip` or `xsel` (`sudo apt install xclip`). Without a
-  clipboard tool even copy-only cannot place text — install one.
+  clipboard tool even copy-only cannot place text, so install one.
 
 ## Linux / Wayland
 
 Wayland deliberately restricts global input for security, so this is
-**best-effort with graceful, explicit fallback** — it never fails silently and
+**best-effort with graceful, explicit fallback**: it never fails silently and
 never requires root. See [wayland-notes.md](wayland-notes.md) for the full
 story. In short:
 

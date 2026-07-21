@@ -4,15 +4,15 @@
 
 TalkPaste is split into three layers with strict boundaries:
 
-- **`app/services/`** — platform-agnostic logic: audio capture, ASR backends,
-  the deterministic text pipeline, optional rewrite, persistence stores and the
-  orchestrating controller.
-- **`app/platform/`** — the three isolated platform adapters (Windows, X11,
-  Wayland) behind a single `PlatformAdapter` interface. This is the only layer
-  that touches native input/injection, so it can be replaced (e.g. with a
+- **`app/services/`** holds the platform-agnostic logic: audio capture, ASR
+  backends, the deterministic text pipeline, optional rewrite, persistence
+  stores and the orchestrating controller.
+- **`app/platform/`** contains the three isolated platform adapters (Windows,
+  X11, Wayland) behind a single `PlatformAdapter` interface. This is the only
+  layer that touches native input/injection, so it can be replaced (e.g. with a
   Rust/C++ helper) without disturbing the rest.
-- **`app/ui/`** — the PySide6 tray app, settings window and status popup. The
-  CLI never imports this layer, so the headless path has no Qt dependency.
+- **`app/ui/`** provides the PySide6 tray app, settings window and status popup.
+  The CLI never imports this layer, so the headless path has no Qt dependency.
 
 A small spine underpins everything: `models.py` (the typed settings tree and
 enums), `config.py` (per-user paths + load/save), `logging_setup.py`,
@@ -28,7 +28,7 @@ and platform detection).
    at 16 kHz mono float32 into a bounded ring buffer, updating an RMS level for
    the UI meter.
 3. **Finalise.** On release/toggle-off, capture stops and the buffer is handed
-   to a worker thread — the UI/event loop is never blocked.
+   to a worker thread, so the UI/event loop is never blocked.
 4. **Transcribe.** The configured `ASRBackend` (faster-whisper by default) runs
    with Silero VAD (`vad_filter=True`), CPU int8, and the profile's model. The
    model is lazy-loaded on first use.
@@ -65,8 +65,8 @@ backend-neutral so another VAD can be swapped in.
 
 The command parser is fully deterministic and runs before any LLM. It tolerates
 Whisper's own punctuation/capitalisation (command matching strips surrounding
-punctuation and case) and emits plain words verbatim. Casing commands
-(`snake case …`) buffer the following words until the next command or sentence
+punctuation and case) and emits plain words verbatim. Casing commands such as
+`snake case` buffer the following words until the next command or sentence
 boundary. Dictionary and snippet replacements are case-insensitive, whole-word,
 longest-match-first.
 

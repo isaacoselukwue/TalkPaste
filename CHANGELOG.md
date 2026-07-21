@@ -7,7 +7,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
-- Initial release of TalkPaste — a fully-local, cross-platform push-to-talk
+- Initial release of TalkPaste, a fully-local, cross-platform push-to-talk
   dictation app for Windows 10/11 and Ubuntu 22.04+.
 - CLI-first milestone: `transcribe`, `record-once`, `list-audio-devices`,
   `diagnose-platform`, `run-headless`, plus `dictate-toggle`/`dictate-cancel`,
