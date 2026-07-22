@@ -100,7 +100,7 @@ def transcribe(
     from app.services.controller import DictationController
 
     controller = DictationController(settings)
-    typer.echo(f"Transcribing {file} …", err=True)
+    typer.echo(f"Transcribing {file} ...", err=True)
     result = controller.transcribe_file(file)
 
     if result.error:
@@ -145,7 +145,7 @@ def record_once(
 
     controller = DictationController(settings)
     engine = AudioEngine(settings.audio)
-    typer.secho(f"Recording for {seconds:.1f}s … speak now.", fg=typer.colors.CYAN, err=True)
+    typer.secho(f"Recording for {seconds:.1f}s ... speak now.", fg=typer.colors.CYAN, err=True)
     try:
         audio = engine.record_for(seconds)
     except AudioError as exc:
@@ -154,7 +154,7 @@ def record_once(
     finally:
         engine.close()
 
-    typer.secho("Transcribing …", err=True)
+    typer.secho("Transcribing ...", err=True)
     result = controller.process_audio(audio, sample_rate=settings.audio.sample_rate)
     if result.error:
         typer.secho(f"Error: {result.error}", fg=typer.colors.RED, err=True)
@@ -305,7 +305,7 @@ def run_headless(
         while not stop_event.is_set():
             time.sleep(0.2)
     finally:
-        typer.secho("\nShutting down …", err=True)
+        typer.secho("\nShutting down ...", err=True)
         control.stop()
         controller.close()
 
@@ -404,7 +404,7 @@ def history(
             typer.echo(entry.text)
         else:
             preview = " ".join(entry.text.split())
-            typer.echo(preview[:200] + ("…" if len(preview) > 200 else ""))
+            typer.echo(preview[:200] + ("..." if len(preview) > 200 else ""))
         typer.echo("")
 
 

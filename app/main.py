@@ -9,15 +9,48 @@ from __future__ import annotations
 
 import sys
 
-from app import APP_NAME
+from app import APP_NAME, __version__
 from app.config import get_paths, load_settings
 from app.logging_setup import configure_logging, get_logger
 
 log = get_logger("main")
 
+# (module, critical?). sounddevice needs system PortAudio on Linux, so it is
+# only critical on Windows, where the DLL is bundled.
+_SELFCHECK_IMPORTS = [
+    ("PySide6.QtWidgets", True),
+    ("numpy", True),
+    ("faster_whisper", True),
+    ("ctranslate2", True),
+    ("onnxruntime", True),
+    ("sounddevice", sys.platform == "win32"),
+]
+
+
+def _selfcheck() -> int:
+    """Import the heavy bundled deps and exit non-zero if a critical one fails."""
+
+    sys.stderr.write(f"{APP_NAME} {__version__} self-check ({sys.platform})\n")
+    ok = True
+    for module, critical in _SELFCHECK_IMPORTS:
+        try:
+            __import__(module)
+            sys.stderr.write(f"  [ok]   {module}\n")
+        except BaseException as exc:  # noqa: BLE001 - report every failure kind
+            tag = "FAIL" if critical else "warn"
+            sys.stderr.write(f"  [{tag}] {module}: {exc}\n")
+            if critical:
+                ok = False
+    sys.stderr.write("self-check: PASS\n" if ok else "self-check: FAIL\n")
+    return 0 if ok else 1
+
 
 def main(argv: list[str] | None = None) -> int:
     """Launch the tray application. Returns a process exit code."""
+
+    args = sys.argv[1:] if argv is None else argv
+    if "--selfcheck" in args:
+        return _selfcheck()
 
     paths = get_paths().ensure()
     settings = load_settings(paths)

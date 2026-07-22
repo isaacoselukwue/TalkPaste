@@ -211,7 +211,7 @@ class DictationController:
                 engine = self._ensure_audio()
                 engine.start()
                 self._recording = True
-                self._set_state(AppState.LISTENING, "Listening…")
+                self._set_state(AppState.LISTENING, "Listening...")
             except Exception as exc:
                 log.error("Could not start audio capture: %s", exc)
                 self._set_state(AppState.ERROR, f"Microphone error: {exc}")
@@ -235,7 +235,7 @@ class DictationController:
             self._set_state(AppState.IDLE, "No audio captured")
             return
 
-        self._set_state(AppState.PROCESSING, "Transcribing…")
+        self._set_state(AppState.PROCESSING, "Transcribing...")
         self._worker = threading.Thread(
             target=self._process_and_insert,
             args=(audio, self.settings.audio.sample_rate),
