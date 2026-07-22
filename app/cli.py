@@ -40,9 +40,6 @@ app = typer.Typer(
 log = get_logger("cli")
 
 
-# Shared setup helpers
-
-
 def _bootstrap(log_level: str | None = None) -> tuple[Settings, object]:
     """Load settings, resolve paths and configure logging. Returns (settings, paths)."""
 
@@ -67,9 +64,6 @@ def _apply_profile(settings: Settings, profile: str | None) -> None:
 
 def _control_socket_path() -> Path:
     return get_paths().data_dir / "control.sock"
-
-
-# Commands
 
 
 @app.command()

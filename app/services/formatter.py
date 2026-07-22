@@ -29,7 +29,7 @@ from app.services.commands import CommandParser
 
 log = get_logger("formatter")
 
-#: Conservative default filler list — safe interjections only. Riskier fillers
+#: Conservative default filler list: safe interjections only. Riskier fillers
 #: ("you know", "like", "sort of") are opt-in via ``extra_fillers`` so we never
 #: destroy meaning by default.
 DEFAULT_FILLERS: tuple[str, ...] = (
@@ -39,7 +39,7 @@ DEFAULT_FILLERS: tuple[str, ...] = (
 
 _WORD_STRIP = ".,!?;:\"'()[]{}"
 
-#: American → British spelling map (case-preserving). Curated to avoid
+#: American-to-British spelling map (case-preserving). Curated to avoid
 #: ambiguous words (e.g. "program", "practice") that change meaning by dialect.
 BRITISH_SPELLINGS: dict[str, str] = {
     "color": "colour", "colors": "colours", "colored": "coloured", "coloring": "colouring",
@@ -161,14 +161,9 @@ class Formatter:
         """Normalise whitespace and apply sentence capitalisation."""
 
         if self.settings.normalize_whitespace:
-            # Collapse runs of spaces/tabs (but keep newlines and single tabs
-            # that are intentional command output distinct only for spaces).
             text = re.sub(r"[ ]{2,}", " ", text)
-            # Remove spaces before closing punctuation.
             text = re.sub(r"\s+([,.;:!?])", r"\1", text)
-            # Strip trailing spaces at line ends.
             text = re.sub(r"[ \t]+(\n)", r"\1", text)
-            # Collapse 3+ blank lines to a single blank line.
             text = re.sub(r"\n{3,}", "\n\n", text)
 
         if self.settings.auto_capitalize:
@@ -190,8 +185,6 @@ class Formatter:
                 phrases.add(words)
         return frozenset(phrases)
 
-
-# Module-level helpers
 
 _WORD_BOUNDARY_RE = re.compile(r"[A-Za-z]+")
 

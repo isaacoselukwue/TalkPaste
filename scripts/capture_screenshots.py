@@ -69,34 +69,28 @@ def main() -> None:
 
     print("Rendering screenshots:")
 
-    # Main window — idle, populated.
     window = MainWindow(controller)
     window.last_text.setPlainText(SAMPLES[0])
     window.refresh_recent()
     window.update_state(AppState.IDLE, "Ready")
     _save(window, "screenshot-main.png", 460, 620)
 
-    # Main window — listening, with an active level meter.
     window.update_state(AppState.LISTENING, "Listening… speak now")
     window.level_bar.setValue(64)
     _save(window, "screenshot-listening.png", 460, 620)
 
-    # Settings — Model tab.
     settings_win = SettingsWindow(settings, get_paths())
     tabs = settings_win.findChild(QTabWidget)
     tabs.setCurrentIndex(0)
     _save(settings_win, "screenshot-settings.png", 560, 640)
 
-    # Settings — Shortcuts tab.
     tabs.setCurrentIndex(1)
     _save(settings_win, "screenshot-shortcuts.png", 560, 640)
 
-    # Settings — Diagnostics tab.
     tabs.setCurrentIndex(5)
     settings_win._refresh_diagnostics()
     _save(settings_win, "screenshot-diagnostics.png", 560, 640)
 
-    # Status popup — listening.
     popup = StatusPopup()
     popup.set_state(AppState.LISTENING, "Listening…")
     popup.set_level(0.6)

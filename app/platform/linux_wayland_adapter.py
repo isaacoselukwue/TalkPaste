@@ -54,8 +54,6 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 log = get_logger("wayland")
 
 
-# Portal constants
-
 _PORTAL_BUS = "org.freedesktop.portal.Desktop"
 _PORTAL_PATH = "/org/freedesktop/portal/desktop"
 _GLOBAL_SHORTCUTS_IFACE = "org.freedesktop.portal.GlobalShortcuts"
@@ -92,9 +90,6 @@ _REQUEST_INTROSPECTION = """<node>
 </node>"""
 
 
-# Typed errors
-
-
 class PortalError(RuntimeError):
     """Base class for XDG Desktop Portal failures."""
 
@@ -105,9 +100,6 @@ class HotkeyPortalError(PortalError):
 
 class PortalPasteError(PortalError):
     """Raised internally when the RemoteDesktop paste path is unavailable."""
-
-
-# Small helpers
 
 
 def _new_token() -> str:
@@ -246,9 +238,6 @@ def _unwrap_variant(value: Any) -> Any:
     """Return the underlying value of a ``dbus_next.Variant`` (or passthrough)."""
 
     return value.value if hasattr(value, "value") else value
-
-
-# GlobalShortcuts listener (dedicated asyncio thread)
 
 
 class _GlobalShortcutsListener:
@@ -424,9 +413,6 @@ class _GlobalShortcutsListener:
             pass
 
 
-# RemoteDesktop keyboard-injection session (dedicated asyncio thread)
-
-
 class _RemoteDesktopSession:
     """A persistent RemoteDesktop portal session used to inject ``Ctrl+V``.
 
@@ -582,9 +568,6 @@ class _RemoteDesktopSession:
                 self._bus.disconnect()
         except Exception:  # pragma: no cover - defensive
             pass
-
-
-# Adapter
 
 
 class LinuxWaylandAdapter(PlatformAdapter):

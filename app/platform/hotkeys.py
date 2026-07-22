@@ -14,7 +14,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-# Canonical modifier tokens.
 _MODIFIER_ALIASES = {
     "ctrl": "ctrl",
     "control": "ctrl",
@@ -31,7 +30,6 @@ _MODIFIER_ALIASES = {
     "command": "meta",
 }
 
-# Canonical main-key aliases (normalised, lower-case).
 _KEY_ALIASES = {
     "esc": "esc",
     "escape": "esc",

@@ -170,9 +170,6 @@ class PlatformAdapter(abc.ABC):
             pass
 
 
-# Platform detection (pure / testable)
-
-
 def detect_platform_kind(
     env: Mapping[str, str] | None = None,
     platform_name: str | None = None,

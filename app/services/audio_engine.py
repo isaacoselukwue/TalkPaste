@@ -451,10 +451,8 @@ class AudioEngine:
             head = self._blocks[0]
             head_len = int(head.shape[0])
             if head_len <= excess:
-                # Drop the whole leading block.
                 self._blocks.pop(0)
                 self._frames -= head_len
             else:
-                # Trim the front of the leading block.
                 self._blocks[0] = head[excess:]
                 self._frames -= excess

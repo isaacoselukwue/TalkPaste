@@ -132,9 +132,6 @@ class _Builder:
         return "".join(p.text for p in self._pieces)
 
 
-# Command definitions
-
-
 class _CaseMode(str, Enum):
     NONE = "none"
     SNAKE = "snake"
@@ -161,14 +158,12 @@ class _Command:
 
 def _build_command_table() -> list[_Command]:
     cmds: list[_Command] = [
-        # Line breaks (longest phrases first is handled by sorting later).
         _Command(("new", "paragraph"), "newline", "\n\n"),
         _Command(("new", "line"), "newline", "\n"),
         _Command(("press", "enter"), "newline", "\n"),
         _Command(("next", "line"), "newline", "\n"),
         _Command(("tab",), "tab"),
         _Command(("tab", "key"), "tab"),
-        # Punctuation.
         _Command(("full", "stop"), "punct", "."),
         _Command(("period",), "punct", "."),
         _Command(("comma",), "punct", ","),
@@ -181,7 +176,6 @@ def _build_command_table() -> list[_Command]:
         _Command(("hyphen",), "punct", "-"),
         _Command(("dash",), "punct", "-"),
         _Command(("ellipsis",), "punct", "…"),
-        # Grouping.
         _Command(("open", "quote"), "open", '"'),
         _Command(("open", "quotes"), "open", '"'),
         _Command(("close", "quote"), "punct", '"'),
@@ -194,21 +188,17 @@ def _build_command_table() -> list[_Command]:
         _Command(("close", "paren"), "punct", ")"),
         _Command(("open", "parenthesis"), "open", "("),
         _Command(("close", "parenthesis"), "punct", ")"),
-        # Lists.
         _Command(("bullet", "list"), "bullet"),
         _Command(("bullet", "point"), "bullet"),
         _Command(("new", "bullet"), "bullet"),
         _Command(("numbered", "list"), "numbered"),
         _Command(("number", "list"), "numbered"),
         _Command(("next", "item"), "numbered"),
-        # Editing.
         _Command(("scratch", "that"), "scratch"),
         _Command(("undo", "last", "phrase"), "undo"),
         _Command(("undo", "that"), "undo"),
-        # Casing (core).
         _Command(("snake", "case"), "case", _CaseMode.SNAKE.value),
         _Command(("camel", "case"), "case", _CaseMode.CAMEL.value),
-        # Casing (developer mode).
         _Command(("kebab", "case"), "case", _CaseMode.KEBAB.value, dev_only=True),
         _Command(("constant", "case"), "case", _CaseMode.CONSTANT.value, dev_only=True),
         _Command(("screaming", "snake", "case"), "case", _CaseMode.CONSTANT.value, dev_only=True),
@@ -239,9 +229,6 @@ def _tokenize(text: str) -> list[_Token]:
         cmp = raw.lower().strip(_STRIP_CHARS)
         tokens.append(_Token(raw=raw, cmp=cmp))
     return tokens
-
-
-# Case conversion helpers
 
 
 def _clean_words(words: list[str]) -> list[str]:
@@ -338,7 +325,6 @@ class CommandParser:
                 i += span
                 continue
 
-            # Not a command: a plain word.
             token = tokens[i]
             if case_mode is not _CaseMode.NONE:
                 case_buffer.append(token.raw)

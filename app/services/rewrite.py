@@ -313,9 +313,6 @@ class RewriteEngine:
         return content if content is not None else text
 
 
-# Response parsing / output sanitising
-
-
 def _extract_chat_content(response: Any) -> str | None:
     """Extract the assistant message text from a chat-completion response.
 

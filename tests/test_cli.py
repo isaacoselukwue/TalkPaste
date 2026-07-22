@@ -39,7 +39,6 @@ def test_diagnose_platform(data_dir):
     result = runner.invoke(app, ["diagnose-platform"])
     assert result.exit_code == 0
     assert "platform" in result.stdout.lower()
-    # One of the known kinds is reported.
     assert any(k in result.stdout for k in ("linux_x11", "linux_wayland", "windows", "macos", "unknown"))
 
 

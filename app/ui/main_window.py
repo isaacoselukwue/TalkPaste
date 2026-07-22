@@ -87,9 +87,9 @@ def _play_icon(recording: bool) -> QIcon:
     p.setBrush(QColor("white"))
     p.setPen(Qt.PenStyle.NoPen)
     if recording:
-        p.drawRoundedRect(12, 12, 16, 16, 3, 3)  # stop square
+        p.drawRoundedRect(12, 12, 16, 16, 3, 3)
     else:
-        p.drawPolygon(QPolygon([QPoint(15, 11), QPoint(15, 29), QPoint(30, 20)]))  # play triangle
+        p.drawPolygon(QPolygon([QPoint(15, 11), QPoint(15, 29), QPoint(30, 20)]))
     p.end()
     return QIcon(pm)
 
@@ -135,8 +135,6 @@ class MainWindow(QMainWindow):
 
         self.update_state(AppState.IDLE, "Ready")
         self.refresh_recent()
-
-    # -- construction -------------------------------------------------------
 
     def _build_header(self) -> QHBoxLayout:
         row = QHBoxLayout()
@@ -235,8 +233,6 @@ class MainWindow(QMainWindow):
         row.addWidget(hint)
         return row
 
-    # -- controller-driven updates (called on the GUI thread) --------------
-
     def update_state(self, state: AppState, message: str = "") -> None:
         colour = _STATE_COLOURS.get(state, "#5f6368")
         self.state_pill.setText(_STATE_LABELS.get(state, state.value.title()))
@@ -284,8 +280,6 @@ class MainWindow(QMainWindow):
             item.setToolTip("Double-click to copy")
             self.recent_list.addItem(item)
 
-    # -- actions ------------------------------------------------------------
-
     def _toggle(self) -> None:
         self.controller.toggle_dictation()
 
@@ -303,8 +297,6 @@ class MainWindow(QMainWindow):
         if text:
             self.controller.adapter.set_clipboard(text)
             self.status_label.setText("Copied to clipboard.")
-
-    # -- close to tray ------------------------------------------------------
 
     def closeEvent(self, event) -> None:  # noqa: N802 - Qt override
         event.ignore()

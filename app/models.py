@@ -17,8 +17,6 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-# Enumerations
-
 
 class AppState(str, Enum):
     """Lifecycle states surfaced by the tray icon and status popup."""
@@ -83,9 +81,6 @@ class PlatformKind(str, Enum):
     LINUX_WAYLAND = "linux_wayland"
     MACOS = "macos"
     UNKNOWN = "unknown"
-
-
-# Settings sections
 
 
 @dataclass
@@ -322,9 +317,6 @@ class Settings:
 CURRENT_SETTINGS_VERSION = 1
 
 
-# Generic dataclass <-> JSON helpers
-
-
 def _to_jsonable(obj: Any) -> Any:
     """Recursively convert dataclasses/enums into JSON-serialisable values."""
 
@@ -375,11 +367,9 @@ def _coerce(field_type: Any, value: Any) -> Any:
     if resolved is None:
         return value
 
-    # Nested dataclass.
     if dataclasses.is_dataclass(resolved) and isinstance(value, dict):
         return _from_jsonable(resolved, value)
 
-    # Enum.
     if isinstance(resolved, type) and issubclass(resolved, Enum):
         try:
             return resolved(value)
